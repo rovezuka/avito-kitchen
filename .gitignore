@@ -1,0 +1,18 @@
+# бинарники
+/bin/
+/tmp/
+
+# локальное окружение
+.env
+.env.local
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# покрытие тестами
+coverage.out
+coverage.html
