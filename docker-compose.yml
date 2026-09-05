@@ -33,5 +33,29 @@ services:
     command: ["up"]
     restart: "no"
 
+  platform:
+    build:
+      context: .
+      dockerfile: deployments/platform.Dockerfile
+    container_name: kitchen-platform
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+    environment:
+      APP_ENV: local
+      LOG_LEVEL: debug
+      HTTP_PORT: "8080"
+      SHUTDOWN_TIMEOUT: 10s
+      POSTGRES_DSN: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
+    ports:
+      - "${PLATFORM_HTTP_PORT}:8080"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8080/healthz" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
   pgdata:
