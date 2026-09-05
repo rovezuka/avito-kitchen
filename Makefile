@@ -31,3 +31,8 @@ test: ## запустить тесты
 .PHONY: tidy
 tidy: ## привести go.mod в порядок
 	go mod tidy
+
+.PHONY: generate
+generate: ## сгенерировать серверный код из OpenAPI
+	@mkdir -p internal/platform/generated/publicapi
+	go tool oapi-codegen -config api/cfg/public-server.yaml api/public.openapi.yaml
